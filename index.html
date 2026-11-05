@@ -14,6 +14,7 @@
     .skip {position:absolute;left:-9999px;top:8px;background:#fff;padding:8px 12px;z-index:10;} .skip:focus {left:10px;}
     .hero { color:#fff; background:radial-gradient(ellipse at 90% 0%,#27656d 0%,transparent 43%),linear-gradient(135deg,#102637,#193f4a);padding:28px 24px 90px; }
     .nav {max-width:1060px;margin:0 auto 85px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;}
+    .nav-links {display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
     .brand {font-size:.78rem;font-weight:800;letter-spacing:.14em;text-decoration:none;text-transform:uppercase;color:#fff;}
     .nav a:not(.brand) {color:#d8edf0;text-decoration:none;font-size:.87rem;} .nav a:hover {text-decoration:underline;}
     .hero-inner {max-width:960px;margin:0 auto;}
@@ -49,7 +50,7 @@
   <header class="hero">
     <nav class="nav" aria-label="Main navigation">
       <a class="brand" href="index.html">STAT 386 / Data Stories</a>
-      <a href="#posts">Browse posts</a>
+      <div class="nav-links"><a href="#posts">Browse posts</a><a href="https://github.com/DarthVenatus22521/Tutorial-Blogs" target="_blank" rel="noopener noreferrer">Blog repository ↗</a></div>
     </nav>
     <div class="hero-inner">
       <div class="eyebrow">BYU · Fall 2026 · Python &amp; statistics</div>
@@ -75,7 +76,7 @@
         <div class="post-art figcaption">Steam game ratings by genre and original price bracket</div>
       </div>
     </article>
-    <p class="note">More projects can be added as individual HTML files in the <code>posts/</code> directory. Source code for each project lives in a separate repository, linked from its article.</p>
+    <p class="note">More projects can be added as individual HTML files in the <code>posts/</code> directory. Source code for each project lives in a separate repository, linked from its article. You can also <a href="https://github.com/DarthVenatus22521/Tutorial-Blogs" target="_blank" rel="noopener noreferrer">view this blog’s GitHub repository</a> to see how the site is organized.</p>
   </main>
   <footer><div class="footer-inner"><span>STAT 386 · Brigham Young University · Fall 2026</span><span>Written with Python, data, and curiosity.</span></div></footer>
 </body>
