@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="A Python tutorial for Riot API match history, KDA, win rate, and charts." name="description"/><title>From Riot API to Match Statistics | Python Walkthrough</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#111c2d;--card:#162439;--line:#283951;--text:#eaf0f8;--muted:#a9bad0;--accent:#7fc8ff;--accent2:#a6e5c3}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.75}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#b3e0ff}.site-head{border-bottom:1px solid var(--line);background:linear-gradient(115deg,#142641,#0c1524);padding:52px max(24px,calc((100vw - 1200px)/2));}.eyebrow{color:var(--accent2);text-transform:uppercase;letter-spacing:.14em;font-size:.76rem;font-weight:750}.site-head h1{font-size:clamp(2rem,4vw,3.4rem);line-height:1.15;max-width:840px;margin:15px 0}.site-head p{max-width:700px;color:var(--muted);margin-bottom:0}.layout{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,1fr);gap:50px;padding:44px 24px 90px}.toc{align-self:start;position:sticky;top:26px;border-left:1px solid var(--line);padding:5px 0 5px 18px}.toc strong{display:block;font-size:.75rem;color:var(--muted);letter-spacing:.13em;text-transform:uppercase;margin:0 0 12px}.toc a{display:block;text-decoration:none;color:var(--muted);font-size:.89rem;line-height:1.5;padding:7px 0}.toc a:hover{color:var(--accent)}article{min-width:0;max-width:840px}article h2{font-size:1.65rem;line-height:1.3;margin:49px 0 16px;padding-top:18px;border-top:1px solid var(--line);scroll-margin-top:20px}article p{margin:15px 0;color:#d3dfed}article strong{color:var(--text)}article :not(pre)>code{background:#1d3046;border:1px solid #344760;padding:.12em .38em;border-radius:5px;font-size:.9em;overflow-wrap:anywhere}pre.code-block{position:relative;background:#091421;border:1px solid var(--line);border-radius:13px;overflow:hidden;margin:20px 0 25px;line-height:1.55}.code-heading{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:#142238;padding:8px 15px;color:var(--muted);font-size:.72rem;font-weight:700;letter-spacing:.1em}.copy-code{cursor:pointer;background:#253b56;border:1px solid #405b79;color:var(--text);border-radius:6px;padding:5px 11px;font-size:.75rem;font-weight:600}.copy-code:hover{background:#365472}pre.code-block code{display:block;overflow-x:auto;padding:18px 20px;color:#e5edf6;font-size:.85rem;font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;tab-size:4;white-space:pre}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:11px;margin:24px 0}table{border-collapse:collapse;width:100%;min-width:640px;font-size:.91rem}th,td{text-align:left;padding:13px 15px;vertical-align:top;border-bottom:1px solid var(--line)}th{background:#1c3048;color:var(--text)}tr:last-child td{border-bottom:0}td{color:#cddaea}.article-image{display:block;max-width:100%;height:auto;margin:26px auto 8px;border:1px solid var(--line);border-radius:10px}.figure-caption{color:var(--muted);font-size:.88rem;text-align:center}.image-missing{display:block;border:1px dashed #54708d;background:#15243a;border-radius:10px;padding:22px;color:var(--muted);font-size:.9rem;margin:20px 0}.image-missing[hidden]{display:none}.footer{border-top:1px solid var(--line);padding:24px;color:var(--muted);font-size:.85rem;text-align:center}@media(max-width:860px){.layout{grid-template-columns:1fr;gap:12px;padding-top:18px}.toc{position:static;border-left:0;border-bottom:1px solid var(--line);padding:0 0 15px;display:flex;gap:10px;flex-wrap:wrap}.toc strong{width:100%;margin-bottom:0}.toc a{padding:6px 11px;border-radius:99px;background:var(--panel);font-size:.8rem}.site-head{padding:40px 24px}}
+</style><style>
+.blog-nav {max-width:1200px;margin:0 auto 34px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.blog-nav a {color:#d7eaf3;text-decoration:none;font-size:.9rem;font-weight:700;border:1px solid #446079;padding:8px 13px;border-radius:7px}
+.blog-nav a:hover {background:#263f5d;color:white}
+.article-image {background:#fff}
+@media(max-width:500px) {.blog-nav {gap:9px;margin-bottom:26px}.blog-nav a {font-size:.8rem}}
+</style></head>
+<body>
+<header class="site-head"><nav aria-label="Blog navigation" class="blog-nav"><a class="home-link" href="../index.html">← All posts</a><a class="source-link" href="https://github.com/DarthVenatus22521/Riot-API-Tutorial" rel="noopener noreferrer" target="_blank">Source repository ↗</a></nav><div class="eyebrow">League of Legends · Python · Data Science</div><h1>From Riot API to Match Statistics</h1><p>A step-by-step walkthrough of requesting match history, cleaning JSON data, and visualizing ranked performance.</p></header>
+<div class="layout"><aside aria-label="Table of contents" class="toc"><strong>On this page</strong>
+<a href="#keep-your-api-key-out-of-your-code">Keep your API key out of your code</a>
+<a href="#look-up-a-player-and-their-match-ids">Look up a player and their match IDs</a>
+<a href="#turn-nested-json-into-one-row-per-match">Turn nested JSON into one row per match</a>
+<a href="#clean-the-matches-and-calculate-statistics">Clean the matches and calculate statistics</a>
+<a href="#plot-performance-over-time">Plot performance over time</a>
+<a href="#try-it-with-your-own-match-history">Try it with your own match history</a>
+</aside><main><article>
+<p>League of Legends match history is a useful example of a common data-science task: data are available through an API, but they arrive as nested JSON rather than as a tidy table. In this tutorial, we will use Python to request recent League of Legends match data, keep only Ranked Solo/Duo games, calculate KDA and win rate, and plot how those statistics change across matches.</p>
+<p>You will need a Riot developer API key and the Python packages <code>requests</code>, <code>pandas</code>, <code>matplotlib</code>, and <code>seaborn</code>. Install the packages with:</p>
+<pre class="code-block"><div class="code-heading"><span>BASH</span><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div><code>pip install requests pandas matplotlib seaborn</code></pre>
+<h2 id="keep-your-api-key-out-of-your-code">Keep your API key out of your code</h2>
+<p>An API key identifies your requests to Riot. Treat it like a password: do not post it in a public repository, blog, screenshot, or shared notebook. Riot’s <a href="https://developer.riotgames.com/docs/lol">developer documentation</a> says API keys should not be included in code. If a key has already been shared, revoke it in the Developer Portal and create a fresh one.</p>
+<p>Store your new key in an environment variable. On macOS or Linux, you can set it in a terminal before running your script:</p>
+<pre class="code-block"><div class="code-heading"><span>BASH</span><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div><code>export RIOT_API_KEY="paste-your-new-key-here"</code></pre>
+<p>Then read it in Python and add it to the request header:</p>
+<pre class="code-block"><div class="code-heading"><span>PYTHON</span><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div><code>import os
+import requests
+
+api_key = os.getenv("RIOT_API_KEY")
+if not api_key:
+    raise RuntimeError("Set the RIOT_API_KEY environment variable first.")
+
+session = requests.Session()
+session.headers.update({"X-Riot-Token": api_key})</code></pre>
+<p>The session reuses this header for authenticated API calls, so you do not have to attach the key to every URL.</p>
+<p>The tutorial uses three Riot endpoints:</p>
+<div class="table-scroll"><table><thead><tr><th>Endpoint</th><th>Route</th><th>What it provides</th></tr></thead><tbody>
+<tr><td>Account-V1: account by Riot ID</td><td><code>/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}</code></td><td>Converts a Riot ID into the PUUID used by match-history endpoints.</td></tr>
+<tr><td>Match-V5: match IDs by PUUID</td><td><code>/lol/match/v5/matches/by-puuid/{puuid}/ids</code></td><td>Returns recent match IDs; <code>start</code> and <code>count</code> select a page of results.</td></tr>
+<tr><td>Match-V5: match by ID</td><td><code>/lol/match/v5/matches/{matchId}</code></td><td>Returns the full match JSON, including the participant statistics.</td></tr>
+</tbody></table></div>
+<p>These routes are appended to a regional API host such as <code>https://americas.api.riotgames.com</code>.</p>
+<h2 id="look-up-a-player-and-their-match-ids">Look up a player and their match IDs</h2>
+<p>Riot IDs have a game name and a tag line. The Account API converts those two pieces into a PUUID, Riot’s stable player identifier. For the Americas routing cluster, the account lookup endpoint looks like this:</p>
+<pre class="code-block"><div class="code-heading"><span>PYTHON</span><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div><code>from urllib.parse import quote
+
+region = "americas"
+game_name = "your-game-name"
+tag_line = "your-tag"
+
+account_url = (
+    f"https://{region}.api.riotgames.com/riot/account/v1/accounts/"
+    f"by-riot-id/{quote(game_name, safe='')}/{quote(tag_line, safe='')}"
+)
+response = session.get(account_url, timeout=30)
+response.raise_for_status()
+puuid = response.json()["puuid"]</code></pre>
+<p><code>quote</code> safely encodes spaces and special characters in a Riot ID. The <code>raise_for_status()</code> call stops the script with an error if the request fails, instead of letting later code fail in a confusing way. Use the regional routing value that matches the account and endpoint; Riot lists routing values in its <a href="https://developer.riotgames.com/docs/lol#routing-values">API documentation</a>.</p>
+<p>Next, request match IDs. This endpoint returns identifiers, not the full match statistics. The <code>count</code> parameter is capped at 100 per request, so this example asks for 50 recent games:</p>
+<pre class="code-block"><div class="code-heading"><span>PYTHON</span><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div><code>match_ids_url = (
+    f"https://{region}.api.riotgames.com/lol/match/v5/"
+    f"matches/by-puuid/{puuid}/ids"
+)
+response = session.get(
+    match_ids_url,
+    params={"start": 0, "count": 50},
+    timeout=30,
+)
+response.raise_for_status()
+match_ids = response.json()</code></pre>
+<p>Each match ID needs a separate Match API request to retrieve its full record. That means 50 IDs can lead to 50 more requests. The finished script pauses between match requests and waits before retrying if Riot returns a rate-limit response. Keeping the sample to a manageable size makes a tutorial run quicker and gentler on the API.</p>
+<h2 id="turn-nested-json-into-one-row-per-match">Turn nested JSON into one row per match</h2>
+<p>A match response contains a list of ten participants under <code>info["participants"]</code>. <code>pandas.json_normalize()</code> turns that list of dictionaries into columns. We request each match, select the row whose PUUID matches our player, and add match-level fields such as the queue and creation time:</p>
+<pre class="code-block"><div class="code-heading"><span>PYTHON</span><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div><code>import time
+import pandas as pd
+
+rows = []
+for match_id in match_ids:
+    match_url = (
+        f"https://{region}.api.riotgames.com/lol/match/v5/matches/{match_id}"
+    )
+    response = session.get(match_url, timeout=30)
+    response.raise_for_status()
+    match = response.json()
+    info = match["info"]
+    participants = pd.json_normalize(info["participants"])
+    player_row = participants.loc[participants["puuid"].eq(puuid)].copy()
+    if not player_row.empty:
+        player_row["matchId"] = match["metadata"]["matchId"]
+        player_row["gameMode"] = info["gameMode"]
+        player_row["queueId"] = info["queueId"]
+        player_row["gameCreation"] = info["gameCreation"]
+        rows.append(player_row)
+    time.sleep(1.2)  # pause between requests
+
+if not rows:
+    raise RuntimeError("No participant rows were returned.")
+matches = pd.concat(rows, ignore_index=True)</code></pre>
+<p>The result is a rectangular DataFrame: each row is one match for the selected player, and each column is a match statistic or identifier. The complete script also handles HTTP errors and waits before retrying when Riot returns a rate-limit response.</p>
+<h2 id="clean-the-matches-and-calculate-statistics">Clean the matches and calculate statistics</h2>
+<p>The API returns multiple modes and queues. This project focuses on Ranked Solo/Duo, identified by queue ID <code>420</code>; Riot’s <a href="https://static.developer.riotgames.com/docs/lol/queues.json">queue list</a> describes it as 5v5 Ranked Solo. The <code>CLASSIC</code> check keeps the Summoner’s Rift game mode. After filtering, remove duplicate or incomplete rows and sort by creation time so the first row is the oldest match.</p>
+<pre class="code-block"><div class="code-heading"><span>PYTHON</span><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div><code>ranked = matches.loc[
+    matches["gameMode"].eq("CLASSIC") &amp; matches["queueId"].eq(420)
+].copy()
+ranked = ranked.drop_duplicates("matchId").dropna(
+    subset=["gameCreation", "kills", "deaths", "assists", "win"]
+)
+ranked = ranked.sort_values("gameCreation").reset_index(drop=True)
+ranked["match_number"] = range(1, len(ranked) + 1)
+ranked["match_kda"] = (
+    ranked["kills"] + ranked["assists"]
+) / ranked["deaths"].clip(lower=1)
+ranked["rolling_kda"] = ranked["match_kda"].rolling(5, min_periods=1).mean()
+ranked["rolling_win_rate"] = ranked["win"].astype(float).rolling(
+    5, min_periods=1
+).mean()
+ranked["result"] = ranked["win"].map({True: "Win", False: "Loss"})</code></pre>
+<p>KDA is <code>(kills + assists) / deaths</code>. The <code>.clip(lower=1)</code> guard treats a match with zero deaths as a denominator of 1, avoiding division by zero. The rolling calculations summarize the current match and up to the previous four matches; the first few points use fewer than five games. The overall win rate is <code>ranked["win"].mean()</code> because a Boolean column averages to the proportion of <code>True</code> values.</p>
+<h2 id="plot-performance-over-time">Plot performance over time</h2>
+<p>The script creates two Seaborn plots. The first is a scatter plot of each match’s KDA, with color indicating a win or loss. A line overlays the five-match rolling KDA average. The second is a line chart of rolling win rate, with a dashed 50% reference line. In both, the x-axis uses match order from oldest to newest, making recent performance easy to find at the right side.</p>
+<p>These charts answer different questions. The scatter plot shows how much KDA varies from game to game, while its rolling line makes the broader pattern easier to see. The win-rate plot smooths individual outcomes so one win or loss does not dominate the story. Neither chart proves that a player is improving; a short run of matches can be noisy, and KDA or win rate does not capture every contribution to a game.</p>
+<p>Here are example outputs from the script. In the first chart, green points are wins and red points are losses; the dark line is the rolling KDA average. In the second, the blue line shows the win rate across up to the most recent five matches, and the dashed line marks 50%.</p>
+<p><img alt="Scatter plot of KDA in recent ranked Solo/Duo matches, with green win points, red loss points, and a dark five-match rolling average line." class="article-image" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false" src="https://raw.githubusercontent.com/DarthVenatus22521/Riot-API-Tutorial/main/images/recent_match_kda.png"/><span class="image-missing" hidden="">Chart could not be loaded from the Riot API tutorial repository.</span></p>
+<p class="figure-caption"><em>Figure 1. Match-by-match KDA and its five-match rolling average.</em></p>
+<p><img alt="Line chart of rolling win rate across recent ranked Solo/Duo matches, with a dashed 50 percent reference line." class="article-image" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false" src="https://raw.githubusercontent.com/DarthVenatus22521/Riot-API-Tutorial/main/images/recent_match_win_rate.png"/><span class="image-missing" hidden="">Chart could not be loaded from the Riot API tutorial repository.</span></p>
+<p class="figure-caption"><em>Figure 2. Win rate across up to the most recent five matches.</em></p>
+<p>Here is the core Seaborn code for the two views. It expects the cleaned <code>ranked</code> DataFrame from the previous section:</p>
+<pre class="code-block"><div class="code-heading"><span>PYTHON</span><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div><code>import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set_theme(style="whitegrid")
+fig, axes = plt.subplots(2, 1, figsize=(10, 9))
+sns.scatterplot(
+    data=ranked, x="match_number", y="match_kda", hue="result",
+    palette={"Win": "#238b45", "Loss": "#cb181d"}, ax=axes[0]
+)
+sns.lineplot(
+    data=ranked, x="match_number", y="rolling_kda",
+    color="#253858", label="5-match rolling average", ax=axes[0]
+)
+axes[0].set(title="KDA by Match", xlabel="Oldest → newest", ylabel="KDA")
+sns.lineplot(
+    data=ranked, x="match_number", y="rolling_win_rate",
+    marker="o", ax=axes[1]
+)
+axes[1].axhline(0.5, linestyle="--", color="gray", label="50% reference")
+axes[1].set(title="Rolling Win Rate", xlabel="Oldest → newest", ylabel="Win rate")
+axes[1].set_ylim(0, 1)
+fig.tight_layout()
+plt.show()</code></pre>
+<h2 id="try-it-with-your-own-match-history">Try it with your own match history</h2>
+<p>Set your Riot ID and routing cluster in the script, then run it with a fresh API key in the environment. Check that the resulting DataFrame contains only the player’s Ranked Solo/Duo matches before interpreting the plots. As a next step, change the rolling window from five to ten matches and compare how the trend line changes. For details about endpoints and current API guidance, use Riot’s <a href="https://developer.riotgames.com/docs/lol">League of Legends API documentation</a>.</p>
+</article></main></div><footer class="footer">STAT 386 · Fall 2026 · <a href="../index.html">Back to all posts</a> · <a href="https://github.com/DarthVenatus22521/Riot-API-Tutorial">Riot API source code</a></footer><script>document.querySelectorAll('.copy-code').forEach(btn=>btn.addEventListener('click',async()=>{const code=btn.closest('pre').querySelector('code').innerText;try{await navigator.clipboard.writeText(code);btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',1500)}catch(e){btn.textContent='Select code to copy'}}));</script></body></html>

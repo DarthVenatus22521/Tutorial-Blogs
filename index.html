@@ -39,6 +39,16 @@
     .post-art {display:flex;flex-direction:column;justify-content:center;gap:15px;padding:28px;background:#e9f0f0;}
     .post-art img {display:block;width:100%;height:auto;border-radius:9px;border:1px solid #dce3e5;box-shadow:0 9px 27px rgba(9,30,43,.10);}
     .post-art figcaption {font-size:.77rem;color:#536675;text-align:center;}
+    .post-code-link {margin:18px 0 0!important;font-size:.83rem!important}
+    .riot-art {background:#e9eef4}
+    .riot-visual {width:100%;border-radius:12px;overflow:hidden;background:#101e33;border:1px solid #31445d;box-shadow:0 12px 35px rgba(9,30,43,.14)}
+    .riot-visual-head {background:#1b304a;padding:13px 16px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #38506a}
+    .riot-visual-head small {color:#acbdd0;font:600 .75rem ui-monospace,monospace;margin-left:auto}
+    .riot-dot {width:9px;height:9px;background:#6f8da9;border-radius:50%}.riot-dot:first-child {background:#e28d70}.riot-dot:nth-child(2) {background:#e8ba72}.riot-dot:nth-child(3){background:#6bbba2}
+    .riot-terminal {font:500 clamp(.68rem,1vw,.85rem)/2.05 ui-monospace,Consolas,monospace;color:#dce9f5;white-space:pre-line;padding:20px 19px 5px;min-height:165px;display:block;overflow-wrap:anywhere}
+    .riot-terminal span {display:inline}.t-muted {color:#9eb3c8}.t-key{color:#80c9fc}.t-light{color:#b7e4cb}
+    .riot-chart {height:110px;display:flex;align-items:flex-end;gap:11px;padding:0 22px 18px;margin:0 12px 10px;border-bottom:1px solid #506786}
+    .riot-chart span {flex:1;max-width:48px;background:linear-gradient(180deg,#74c7c1,#30868d);border-radius:4px 4px 0 0}
     .note {margin-top:35px;color:var(--muted);font-size:.92rem;max-width:740px;}
     footer {background:var(--dark);padding:34px 24px;color:#c9dcdd;font-size:.85rem;}
     .footer-inner {max-width:1060px;margin:auto;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;} footer a {color:#f0c19d;}
@@ -61,7 +71,7 @@
   <main class="wrap" id="posts">
     <div class="section-head">
       <div><span class="section-label">Published work</span><h2>Latest posts</h2></div>
-      <span style="color:var(--muted);font-size:.88rem">1 article</span>
+      <span style="color:var(--muted);font-size:.88rem">2 articles</span>
     </div>
     <article class="post-card">
       <div class="post-content">
@@ -76,7 +86,25 @@
         <div class="post-art figcaption">Steam game ratings by genre and original price bracket</div>
       </div>
     </article>
-    <p class="note">More projects can be added as individual HTML files in the <code>posts/</code> directory. Source code for each project lives in a separate repository, linked from its article. You can also <a href="https://github.com/DarthVenatus22521/Tutorial-Blogs" target="_blank" rel="noopener noreferrer">view this blog’s GitHub repository</a> to see how the site is organized.</p>
+    <article class="post-card" style="margin-top:26px">
+      <div class="post-content">
+        <span class="post-meta">Python tutorial · APIs · League of Legends · Fall 2026</span>
+        <h3>From Riot API to Match Statistics</h3>
+        <p>A step-by-step Python walkthrough for requesting League of Legends match history, transforming nested JSON into a useful table, and calculating KDA, win rate, and rolling performance.</p>
+        <div class="stat-strip"><div><strong>3</strong> API endpoints</div><div><strong>2</strong> performance charts</div></div>
+        <a class="read-link" href="posts/riot-api-tutorial.html">Read the tutorial →</a>
+        <p class="post-code-link"><a href="https://github.com/DarthVenatus22521/Riot-API-Tutorial" target="_blank" rel="noopener noreferrer">View Riot API source code ↗</a></p>
+      </div>
+      <div class="post-art riot-art">
+        <div class="riot-visual" aria-hidden="true">
+          <div class="riot-visual-head"><span class="riot-dot"></span><span class="riot-dot"></span><span class="riot-dot"></span><small>match_history.py</small></div>
+          <div class="riot-terminal"><span class="t-muted"># Riot API → pandas</span><span class="t-key">match_ids</span> <span class="t-muted">=</span> <span class="t-light">fetch_matches(puuid)</span><span class="t-key">ranked</span> <span class="t-muted">=</span> <span class="t-light">clean_matches(data)</span><span class="t-key">kda</span> <span class="t-muted">=</span> <span class="t-light">(kills + assists) / deaths</span></div>
+          <div class="riot-chart"><span style="height:41%"></span><span style="height:65%"></span><span style="height:47%"></span><span style="height:85%"></span><span style="height:62%"></span><span style="height:95%"></span><span style="height:72%"></span><span style="height:88%"></span></div>
+        </div>
+        <div class="post-art figcaption">Riot API · Ranked match analytics · Python</div>
+      </div>
+    </article>
+    <p class="note">Additional projects can be added as individual HTML files in the <code>posts/</code> directory. Source code for each project lives in a separate repository, linked from its article. You can also <a href="https://github.com/DarthVenatus22521/Tutorial-Blogs" target="_blank" rel="noopener noreferrer">view this blog’s GitHub repository</a> to see how the site is organized.</p>
   </main>
   <footer><div class="footer-inner"><span>STAT 386 · Brigham Young University · Fall 2026</span><span>Written with Python, data, and curiosity.</span></div></footer>
 </body>
